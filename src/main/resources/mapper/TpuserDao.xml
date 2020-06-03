@@ -23,6 +23,14 @@
         where id = #{id}
     </select>
 
+    <select id="queryByOpenId" resultMap="TpuserMap">
+        select
+          *
+
+        from album.tpuser
+        where open_id = #{openId}
+    </select>
+
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="TpuserMap">
         select

@@ -122,4 +122,14 @@
 
     </select>
 
+    <select id="getRecentUpdateAlbum" resultMap="AlbumMap">
+        select t5.* from album.`image` as t1
+            inner join `album_image` as t2 on t1.id = t2.`image_id`
+            inner join `user_album` as t3 on t3.`album_id` = t2.`album_id`
+            inner join user as t4 on t3.`user_id` = t4.`id`
+            inner join album t5 on t5.id =  t2.`album_id`
+            where t4.id = #{userId}
+            order by t1.`add_time` desc
+    </select>
+
 </mapper>

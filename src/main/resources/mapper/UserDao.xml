@@ -79,7 +79,7 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into album.user(username, password, nickname, moblie, email, avatar, idcard, desc)
+        insert into album.user(username, password, nickname, moblie, email, avatar, idcard, `desc`)
         values (#{username}, #{password}, #{nickname}, #{moblie}, #{email}, #{avatar}, #{idcard}, #{desc})
     </insert>
 

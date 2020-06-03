@@ -79,4 +79,8 @@
         delete from album.album_image where id = #{id}
     </delete>
 
+    <delete id="deleteByImageId">
+        delete from album.album_image where image_id = #{imageId}
+    </delete>
+
 </mapper>

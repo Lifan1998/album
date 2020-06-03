@@ -1,9 +1,14 @@
 package com.example.album.controller;
 
+import com.example.album.controller.req.CreateImageRequest;
+import com.example.album.dao.AlbumImageDao;
 import com.example.album.dao.ImageDao;
 import com.example.album.domain.ImageVO;
+import com.example.album.entity.AlbumImage;
 import com.example.album.entity.Image;
 import com.example.album.service.ImageService;
+import com.example.album.service.ImageUploadService;
+import com.example.album.util.Resp;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,6 +33,12 @@ public class ImageController {
     @Resource
     private ImageDao imageDao;
 
+    @Resource
+    private AlbumImageDao albumImageDao;
+
+    @Resource
+    private ImageUploadService imageUploadService;
+
     /**
      * 通过主键查询单条数据
      *
@@ -40,9 +51,28 @@ public class ImageController {
     }
     
     @PostMapping("/create")
-    public Image create(Image image) {
-        this.imageService.insert(image);
-        return image;
+    public boolean create(CreateImageRequest request) {
+
+        List<String> base64StringList = request.getBase64StringList();
+
+        base64StringList.stream().forEach(base64String -> {
+            Image image = new Image();
+            image.setStatus(1);
+            image.setUserId(request.getUserId());
+            Resp<String> resp = imageUploadService.upload(base64String);
+            if (resp.isSuccess()) {
+                image.setImageUrl(resp.getData());
+                imageService.insert(image);
+                AlbumImage albumImage = new AlbumImage();
+                albumImage.setAlbumId(request.getAlbumId());
+                albumImage.setImageId(image.getId());
+                albumImageDao.insert(albumImage);
+            } else {
+                throw new RuntimeException("上传图片失败");
+            }
+
+        });
+        return true;
     }
     
     @PostMapping("/update")
@@ -53,7 +83,24 @@ public class ImageController {
     
     @GetMapping("/delete")
     public boolean deleteById(Integer id) {
-        return imageService.deleteById(id);
+        Image image = imageService.queryById(id);
+        // 放到回收站
+        image.setStatus(-1);
+        return imageService.update(image) != null;
+    }
+
+    @GetMapping("/reducing")
+    public boolean reducing(Integer id) {
+        Image image = imageService.queryById(id);
+        // 移出回收站
+        image.setStatus(1);
+        return imageService.update(image) != null;
+    }
+
+    @GetMapping("/deleteFromDustbin")
+    public boolean deleteFromDustbin(Integer id) {
+        albumImageDao.deleteByImageId(id);
+        return true;
     }
     
     @GetMapping("/queryAll")

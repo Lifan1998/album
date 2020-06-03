@@ -1,8 +1,12 @@
 package com.example.album.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.example.album.controller.req.WeChatLoginRequest;
+import com.example.album.controller.req.WeChatUserInfo;
 import com.example.album.dao.UserDao;
 import com.example.album.entity.User;
 import com.example.album.service.UserService;
+import com.example.album.util.Resp;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -63,6 +67,14 @@ public class UserController {
     @GetMapping("/getRecentUpdateUserList")
     public List<User> getRecentUpdateUserList(Integer userId) {
         return userDao.getRecentUploadUserList(userId);
+    }
+
+    @PostMapping("/wechatLogin")
+    public Resp<User> wechatLogin(@RequestBody WeChatLoginRequest weChatLoginRequest) {
+        System.out.println(weChatLoginRequest);
+        weChatLoginRequest.setAppId("wx02ffc0b1acdf4535");
+        weChatLoginRequest.setAppSecret("63cc5480462ae1446d7da3937496fca6");
+        return userService.tpLogin(weChatLoginRequest);
     }
     
 

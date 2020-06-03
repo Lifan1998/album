@@ -1,6 +1,7 @@
 package com.example.album.dao;
 
 import com.example.album.entity.Tpuser;
+import com.example.album.entity.User;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -61,5 +62,7 @@ public interface TpuserDao {
      * @return 影响行数
      */
     int deleteById(Integer id);
+
+    Tpuser queryByOpenId(String openId);
 
 }

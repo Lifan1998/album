@@ -1,6 +1,9 @@
 package com.example.album.service;
 
+import com.example.album.controller.req.WeChatLoginRequest;
 import com.example.album.entity.User;
+import com.example.album.util.Resp;
+
 import java.util.List;
 
 /**
@@ -53,5 +56,8 @@ public interface UserService {
      * @return 是否成功
      */
     boolean deleteById(Integer id);
+
+
+    Resp<User> tpLogin(WeChatLoginRequest weChatLoginRequest);
 
 }

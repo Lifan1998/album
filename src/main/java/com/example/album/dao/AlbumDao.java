@@ -67,4 +67,6 @@ public interface AlbumDao {
 
     List<Album> queryByUserId(Integer userId);
 
+    List<Album> getRecentUpdateAlbum(Integer userId);
+
 }

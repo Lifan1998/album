@@ -62,4 +62,6 @@ public interface AlbumImageDao {
      */
     int deleteById(Integer id);
 
+    int deleteByImageId(Integer imageId);
+
 }

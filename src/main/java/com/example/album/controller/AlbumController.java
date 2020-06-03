@@ -109,7 +109,8 @@ public class AlbumController {
 
     @GetMapping("/getRecentUpload")
     public List<AlbumVO> getRecentUpload(Integer userId) {
-        return this.albumDao.queryByUserId(userId).stream()
+        return this.albumDao.getRecentUpdateAlbum(userId).stream()
+                .distinct()
                 .map(album1 -> albumVOConvert.toVO(album1, userId))
                 .filter(albumVO -> albumVO.getAlbumCount() != 0)
                 .filter(albumVO -> !albumVO.getPermiss())
